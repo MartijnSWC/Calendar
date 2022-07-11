@@ -9,17 +9,34 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "vue": "^2.6.14"
+    "js-cookie": "^3.0.1",
+    "luxon": "^1.28.0",
+    "vue": "^2.6.14",
+    "vue-axios": "^3.4.1",
+    "vue-ctk-date-time-picker": "^3.0.0-alpha.0",
+    "vue-datetime": "^1.0.0-beta.14",
+    "vue-datetime-js": "^1.2.2",
+    "vue-textarea-autosize": "^1.1.1",
+    "vue2-datepicker": "^3.11.0",
+    "vuejs-datepicker": "^1.6.2",
+    "vuetify": "^2.6.0",
+    "vuex": "^3.6.2",
+    "weekstart": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@types/js-cookie": "^3.0.2",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "vue-template-compiler": "^2.6.14"
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.5.1",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.7.0"
   },
   "eslintConfig": {
     "root": true,
