@@ -1,0 +1,35 @@
+#calendarSheet{
+    height: 900px;
+}
+#buttonMaken{
+    margin-top: 17px;
+    width: 160px;
+    margin-left: 14px;
+    height: 50px;
+    background-color: whitesmoke;
+}
+#mijnagendatekst{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 25px;
+}
+#plusknopje{
+    font-size: 55px;
+    padding-right: 20px;
+    background-image: linear-gradient(to right, violet, rgb(56, 56, 235) , cyan
+     , #F1CD0B);;
+    -webkit-background-clip: text;
+    background-clip: text;
+     color: transparent;
+
+}
+#datumprikker{
+    margin-top: 16px;
+}
+#persoonlijkeafsprakenknop{
+    margin-top: 10px;
+    font-size: 13px;
+}
+#vandaagknopje{
+    margin-left: 247px;
+}

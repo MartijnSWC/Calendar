@@ -1,24 +1,10 @@
 <template>
   <v-row class="fill-height">
-    <v-col cols="3">
-      <v-btn rounded style="width: 180px; height: 40px" @click="dialog = true"
-        ><h3>+ Maken</h3></v-btn
-      >
-      <v-date-picker focus="today" v-model="focus"></v-date-picker>
-      <v-selector
-        v-model="calendarid"
-        :options="kalenderid"
-        item-text="text"
-        item-value="value"
-      ></v-selector>
-    </v-col>
-    <v-col cols="9">
-      <v-sheet height="64">
-        <v-toolbar flat>
-          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-            Vandaag
+    <v-col cols="12" >
+ <v-app-bar clipped-left app flat>
+          <v-btn id="vandaagknopje" outlined class="mr-4" color="grey darken-2" @click="setToday">
+           <h3 id="vandaagtekst">Vandaag</h3> 
           </v-btn>
-          <v-btn @click="getAllEvents">get</v-btn>
           <v-btn fab text small color="grey darken-2" @click="prev">
             <v-icon small> mdi-chevron-left </v-icon>
           </v-btn>
@@ -49,147 +35,9 @@
               </v-list-item>
             </v-list>
           </v-menu>
-        </v-toolbar>
-      </v-sheet>
-
-      <!-- Event Form-->
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        transition="dialog-bottom-transition"
-        hide-overlay
-      >
-        <v-card>
-          <v-row>
-            <v-col cols="1">
-              <v-btn
-                fab
-                text
-                color="secondary"
-                @click="dialog = false"
-                style="display: flex; margin-top: 33px; margin-left: auto"
-              >
-                <v-icon style="font-size: 30px"> mdi-window-close </v-icon>
-              </v-btn>
-            </v-col>
-            <v-col cols="4">
-              <v-form @submit.prevent="createEvent" style="margin-top: 40px">
-                <h1
-                  style="
-                    margin-bottom: 15px;
-                    font-weight: bold;
-                    font-size: 28px;
-                  "
-                >
-                  Nieuwe afspraak
-                </h1>
-                <div style="display: flex">
-                  <v-text-field
-                    v-model="name"
-                    filled
-                    outlined
-                    color="blue"
-                    label="Titel"
-                    type="Text"
-                    style="max-width: 400px; min-width: 150px"
-                    dense
-                    background-color="white"
-                  ></v-text-field>
-                  <v-btn
-                    id="opslaanKnop"
-                    type="submit"
-                    color="success"
-                    style="
-                      margin-left: auto;
-                      height: 40px;
-                      padding-right: min(50px, 5%);
-                    "
-                    @click.stop="dialog = false"
-                  >
-                    Opslaan</v-btn
-                  >
-                </div>
-
-                <v-divider
-                  style="height: 25px; margin-bottom: 20px"
-                ></v-divider>
-                <div style="display: flex">
-                  <datePicker
-                    v-model="begin"
-                    type="datetime"
-                    format="YYYY-MM-DD HH:mm:00"
-                  ></datePicker>
-                  <h3>tot</h3>
-                  <datePicker
-                    v-model="einde"
-                    type="datetime"
-                    format="YYYY-MM-DD HH:mm:00"
-                  ></datePicker>
-                </div>
-                <v-checkbox
-                  v-model="begin"
-                  label="Hele dag"
-                  color="secondary"
-                  value="success"
-                  hide-details
-                ></v-checkbox>
-                <div style="margin-bottom: 20px; margin-top: 60px">
-                  <h2 style="margin-bottom: 8px">Locatie</h2>
-                  <v-btn-toggle v-model="name" mandatory dense>
-                    <v-btn style="max-width: 160px; min-width: 160px">
-                      Adress
-                    </v-btn>
-                    <v-btn style="max-width: 160px; min-width: 160px">
-                      Kantoor
-                    </v-btn>
-                    <v-btn style="max-width: 160px; min-width: 160px">
-                      Online
-                    </v-btn>
-                  </v-btn-toggle>
-                </div>
-                <v-text-field
-                  v-model="name"
-                  filled
-                  outlined
-                  color="blue"
-                  label="Adress"
-                  style="min-width: 150px; margin-top: 4px"
-                  dense
-                  background-color="white"
-                ></v-text-field>
-                <v-select dense outlined label="Agenda"></v-select>
-                <v-textarea
-                  clearable
-                  clear-icon="mdi-close-circle"
-                  label="Binnen enkele minuten ontvang je een bevestiging per email."
-                  outlined
-                ></v-textarea>
-              </v-form>
-            </v-col>
-            <v-col cols="7">
-              <v-text-field
-                v-model="name"
-                filled
-                outlined
-                color="blue"
-                label="Titel"
-                type="Text"
-                style="max-width: 600px"
-                dense
-                background-color="white"
-              ></v-text-field>
- <v-selector
-        v-model="firstname"
-        :options="namen"
-        @search="search" 
-      ></v-selector>  
-      {{this.namen}}
-      <button @click="search">a</button>          </v-col>
-          </v-row>
-        </v-card>
-      </v-dialog>
-
-      <v-sheet height="900">
+        </v-app-bar>
+<Navbarleft @calendar="getCalendar" @differentUser="getDifferentUser" />
+      <v-sheet id="calendarSheet">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -283,8 +131,9 @@
 import { mapGetters } from "vuex";
 import VueDatetimeJs from "vue-datetime-js";
 import "vue2-datepicker/index.css";
+import Navbarleft from "@/components/Navbarleft.vue";
 export default {
-  components: { datePicker: VueDatetimeJs },
+  components: { datePicker: VueDatetimeJs, Navbarleft},
   data: () => ({
     today: new Date().toISOString().substring(0, 10),
     focus: new Date().toISOString().substring(0, 10),
@@ -307,16 +156,21 @@ export default {
     getalletje: 0,
     begin: null,
     einde: null,
-    calendarid: null,
-    kalendernaam: [],
-    kalenderid: [],
+    selectedcalenders: [],
+    kalender: [],
     gebruiker: null,
     dialog: false,
     firstname:null,
-    namen:[]
+    namen:[],
+    adress:null,
+    begintijdeventaanmaken:null,
+    usercalendars:[],
+    differentUser:null,
   }),
   mounted() {
     this.incrementerDing();
+    this.getAllEvents();
+    this.getCalendarsUser();
   },
   computed: {
     ...mapGetters({ token: "gettoken" }),
@@ -353,26 +207,40 @@ export default {
     },
   },
   watch: {
+        colors(colors) {
+      if (!colors) {
+        this.colors='blue';
+      }
+    },
+    differentUser(differentUser){
+      if(differentUser){
+        this.getAllEventsDifferentUser();
+      }
+    },
     user(user) {
       if (user) {
         this.gebruiker = user.id;
-        this.getCalendars();
+        this.getCalendarsUser();
         this.getAllEvents();
         this.getColor();
       }
     },
-    calendarid: function (val) {
+    selectedcalenders: function (val) {
       console.log(val);
-      this.getEvents();
+      this.getEventsOfSelectedCalenders();
       this.getColor();
     },
-       firstname: function (val) {
-      console.log(val);
-       this.search();
-     },
+ 
   },
 
   methods: {
+    getCalendar(value){
+      this.selectedcalenders=value;
+console.log("de calendars", value);
+    }, getDifferentUser(value){
+      this.differentUser=value;
+console.log("de calendars", this.differentUser);
+    },
     createEvent() {
       console.log(this.begin);
       console.log(this.einde);
@@ -397,7 +265,7 @@ export default {
           this.begin = "";
           this.einde = "";
 
-          this.getEvents();
+          this.getAllEvents();
         })
         .catch((error) => {
           console.error(error);
@@ -430,23 +298,23 @@ export default {
           console.error(error);
         });
     },
-    deleteEvent(ev) {
+    deleteEvent(event) {
       this.axios
-        .delete(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar_Account/0`,
+        .delete(`http://localhost/Kyano-Backend-Calendar/v1/Calendar/0`
+          ,
           {
             headers: {
               Authorization: `user ${this.token}`,
             },
             data: {
-              id: ev,
+              id: event,
             },
           }
         )
         .then((res) => {
-          console.log(res);
+          console.log("yes" + res);
           this.selectedOpen = false;
-          this.getEvents();
+          this.getAllEvents();
         })
         .catch((error) => {
           console.error(error);
@@ -455,37 +323,11 @@ export default {
     incrementerDing() {
       this.getalletje++;
     },
-    search() {
-      this.axios
-        .post(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar_Search/0`,
-          {
-            firstname: this.firstname,
-          },
-          {
-            headers: {
-              Authorization: `user ${this.token}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-          for (var j=0; j<res.data.length; j++){
-            this.namen.push(res.data[j].firstname);
-          console.log("events: " + this.namen);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+   
     getAllEvents() {
       this.axios
-        .post(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar_Getall/0`,
-          {
-            id: this.gebruiker,
-          },
+        .get(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0`,
           {
             headers: {
               Authorization: `user ${this.token}`,
@@ -502,12 +344,35 @@ export default {
           console.error(error);
         });
     },
-    getEvents() {
+     getAllEventsDifferentUser() {
       this.axios
-        .post(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar_Account/0`,
+        .put(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/getAllEventsDifferentUser`,
           {
-            calendarid: this.calendarid,
+          id: this.differentUser
+          },
+          {
+            headers: {
+              Authorization: `user ${this.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("check" + res.data);
+          this.events = res.data;
+          this.colors = "blue";
+          console.log("events: " + this.events);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+     },
+    getEventsOfSelectedCalenders() {
+         this.axios
+        .post(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/selectedCalenders`,
+          {
+            calenders: this.selectedcalenders,
           },
           {
             headers: {
@@ -518,7 +383,6 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.events = res.data;
-          console.log("events: " + this.events);
         })
         .catch((error) => {
           console.error(error);
@@ -529,7 +393,7 @@ export default {
         .post(
           `http://localhost/Kyano-Backend-Calendar/v1/Calendar_Color/0`,
           {
-            calendarid: this.calendarid,
+            selectedcalenders: this.selectedcalenders,
           },
           {
             headers: {
@@ -546,14 +410,12 @@ export default {
           console.error(error);
         });
     },
-    getCalendars() {
+    getCalendarsUser() {
       console.log(this.gebruiker);
       this.axios
-        .post(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar_User/0`,
-          {
-            id: this.gebruiker,
-          },
+        .get(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/calanders`,
+
           {
             headers: {
               Authorization: `user ${this.token}`,
@@ -561,25 +423,15 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
-          for (var i = 0; i < res.data.length; i++) {
-            this.kalendernaam.push(res.data[i].calendar_name);
-            this.kalenderid.push(res.data[i].calendar);
-          }
+          this.kalender=res.data;
+                    console.log("kalender: " + this.kalender);
+
         })
         .catch((error) => {
           console.error(error);
         });
     },
-
-    viewDay({ date }) {
-      this.focus = date;
-      this.type = "day";
-    },
-    getEventColor() {
-      return this.colors;
-    },
-    setToday() {
+   setToday() {
       this.focus = "";
     },
     prev() {
@@ -588,6 +440,14 @@ export default {
     next() {
       this.$refs.calendar.next();
     },
+    viewDay({ date }) {
+      this.focus = date;
+      this.type = "day";
+    },
+    getEventColor() {
+      return this.colors;
+    },
+  
     editEvent(ev) {
       this.currentlyEditing = ev.id;
     },
@@ -623,9 +483,4 @@ export default {
 </script>
 
 <style>
-@media (max-width: 991.98px) {
-  #opslaanKnop {
-    margin-left: 60px;
-  }
-}
 </style>

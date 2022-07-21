@@ -1,20 +1,16 @@
 <template>
-  <v-app>
-    <v-content><Calendar/></v-content>
+<v-app>
+  <v-content>
+	<router-view v-if="ready" />
+  </v-content>
   </v-app>
 </template>
 
 <script>
-import Calendar from './components/Calendar';
 const cookies= require ('js-cookie');
 import config from './config'
 export default {
   name: 'App',
-
-  components: {
-    Calendar,
-    
-},
 
   data: () => ({
     ready:false
