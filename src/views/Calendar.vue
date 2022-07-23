@@ -13,8 +13,13 @@
           </v-btn>
           <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-spacer></v-spacer>
+       
+                      <v-icon @click="instellingen = true" id="instellingenwiel">mdi-cog-outline</v-icon>
+
+      
           <v-menu bottom right>
             <template v-slot:activator="{ on, attrs }">
+        
               <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
                 <span>{{ typeToLabel[type] }}</span>
                 <v-icon right> mdi-menu-down </v-icon>
@@ -124,6 +129,57 @@
         </v-menu>
       </v-sheet>
     </v-col>
+      <v-dialog
+        v-model="dialogCalendarMaken"
+        transition="dialog-bottom-transition"
+width="unset"
+        hidden-overlay
+      >
+      <v-card>
+       <!-- Maak ding om calendar id te krijgen -->
+        <label>Calendar Naam</label>
+          <v-text-field
+                  v-model="adress"
+                  filled
+                  outlined
+                  color="blue"
+                  label="Adress"
+                  style="width:50%; margin-top: 4px"
+                  dense
+                  background-color="white"
+                ></v-text-field>
+                          <label>Gasten Toevoegen</label>
+                          <v-autocomplete
+            v-model="differentUser"
+            :items="guests"
+            item-text="firstname"
+            item-value="id"
+            outlined
+            dense
+            chips
+            small-chips
+            label="Gasten toevoegen"
+            style="width:50%"
+          ></v-autocomplete> 
+</v-card>
+
+      </v-dialog>
+ <v-dialog
+  v-model="instellingen"
+      fullscreen
+      transition="dialog-bottom-transition"
+      hide-overlay
+      >  
+      <v-row>
+    <v-col cols="12">
+      <v-tabs vertical>
+        <v-tab>Calendar maken</v-tab>
+                <v-tab>Algemene Voorwaarden</v-tab>
+                                <v-tab>Uitloggen</v-tab>
+      </v-tabs>
+    </v-col>
+    </v-row>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -166,6 +222,9 @@ export default {
     begintijdeventaanmaken:null,
     usercalendars:[],
     differentUser:null,
+    dialogCalendarMaken:false,
+    highestCalendarId:null,
+    instellingen:false,
   }),
   mounted() {
     this.incrementerDing();
@@ -216,6 +275,7 @@ export default {
       if(differentUser){
         this.getAllEventsDifferentUser();
       }
+      
     },
     user(user) {
       if (user) {
@@ -335,7 +395,7 @@ console.log("de calendars", this.differentUser);
           }
         )
         .then((res) => {
-          console.log(res.data);
+          console.log("komaan" + res.data);
           this.events = res.data;
           this.colors = "blue";
           console.log("events: " + this.events);
@@ -383,6 +443,28 @@ console.log("de calendars", this.differentUser);
         .then((res) => {
           console.log(res.data);
           this.events = res.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+     getHighestCalendarid() {
+      this.axios
+        .get(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/getHighestCalendarid`,
+          {
+            headers: {
+              Authorization: `user ${this.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("komaan" + res.data);
+          this.highestCalendarId = res.data;
+          console.log("eee" + this.highestCalendarId[0].id);
+           this.highestCalendarId[0].id+=1;
+          console.log("events: " + this.highestCalendarId);
+          this.dialogCalendarMaken=true;
         })
         .catch((error) => {
           console.error(error);

@@ -33,3 +33,21 @@
 #vandaagknopje{
     margin-left: 247px;
 }
+#gastenTekst{
+margin-bottom: 8px;
+margin-top: 325px;
+}
+#tijdpickerevent{
+}
+#changeposition{
+    position: absolute;
+    left: 0px;
+}
+#opslaanKnop{
+    text-align:right;
+}
+  
+#instellingenwiel{
+    font-size: 35px;
+    margin-right:15px ;
+}
