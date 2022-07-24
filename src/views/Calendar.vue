@@ -1,6 +1,7 @@
 <template>
   <v-row class="fill-height">
     <v-col cols="12" >
+      <InstellingenDialog :instellingen="instellingen" />
  <v-app-bar clipped-left app flat>
           <v-btn id="vandaagknopje" outlined class="mr-4" color="grey darken-2" @click="setToday">
            <h3 id="vandaagtekst">Vandaag</h3> 
@@ -41,7 +42,7 @@
             </v-list>
           </v-menu>
         </v-app-bar>
-<Navbarleft @calendar="getCalendar" @differentUser="getDifferentUser" />
+<Navbarleft @calendar="getCalendar" @differentUser="getDifferentUser" :today="today" :focus="focus" />
       <v-sheet id="calendarSheet">
         <v-calendar
           ref="calendar"
@@ -164,22 +165,6 @@ width="unset"
 </v-card>
 
       </v-dialog>
- <v-dialog
-  v-model="instellingen"
-      fullscreen
-      transition="dialog-bottom-transition"
-      hide-overlay
-      >  
-      <v-row>
-    <v-col cols="12">
-      <v-tabs vertical>
-        <v-tab>Calendar maken</v-tab>
-                <v-tab>Algemene Voorwaarden</v-tab>
-                                <v-tab>Uitloggen</v-tab>
-      </v-tabs>
-    </v-col>
-    </v-row>
-    </v-dialog>
   </v-row>
 </template>
 
@@ -188,8 +173,9 @@ import { mapGetters } from "vuex";
 import VueDatetimeJs from "vue-datetime-js";
 import "vue2-datepicker/index.css";
 import Navbarleft from "@/components/Navbarleft.vue";
+import InstellingenDialog from "@/components/InstellingenDialog.vue";
 export default {
-  components: { datePicker: VueDatetimeJs, Navbarleft},
+  components: { datePicker: VueDatetimeJs, Navbarleft, InstellingenDialog },
   data: () => ({
     today: new Date().toISOString().substring(0, 10),
     focus: new Date().toISOString().substring(0, 10),
@@ -223,13 +209,13 @@ export default {
     usercalendars:[],
     differentUser:null,
     dialogCalendarMaken:false,
-    highestCalendarId:null,
     instellingen:false,
   }),
   mounted() {
     this.incrementerDing();
     this.getAllEvents();
     this.getCalendarsUser();
+    this.getHighestCalendarid();
   },
   computed: {
     ...mapGetters({ token: "gettoken" }),
@@ -301,6 +287,29 @@ console.log("de calendars", value);
       this.differentUser=value;
 console.log("de calendars", this.differentUser);
     },
+    
+    getHighestCalendarid() {
+      this.axios
+        .get(
+          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/getHighestCalendarid`,
+          {
+            headers: {
+              Authorization: `user ${this.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("komaan" + res.data);
+          this.highestCalendarId = res.data;
+          console.log("eee" + this.highestCalendarId[0].id);
+           this.highestCalendarId[0].id+=1;
+          console.log("events: " + this.highestCalendarId);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
     createEvent() {
       console.log(this.begin);
       console.log(this.einde);
@@ -448,28 +457,7 @@ console.log("de calendars", this.differentUser);
           console.error(error);
         });
     },
-     getHighestCalendarid() {
-      this.axios
-        .get(
-          `http://localhost/Kyano-Backend-Calendar/v1/Calendar/0/getHighestCalendarid`,
-          {
-            headers: {
-              Authorization: `user ${this.token}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log("komaan" + res.data);
-          this.highestCalendarId = res.data;
-          console.log("eee" + this.highestCalendarId[0].id);
-           this.highestCalendarId[0].id+=1;
-          console.log("events: " + this.highestCalendarId);
-          this.dialogCalendarMaken=true;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+   
     getColor() {
       this.axios
         .post(

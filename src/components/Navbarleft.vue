@@ -96,9 +96,11 @@
                
                 <v-col cols="5">
                    <div v-if="heledag">
-                    <datePicker v-model="einde"
+                    <datePicker v-model="begintijdeventaanmaken"
                     placeholder="Hele dag invoeren"
                     color="green"
+                                        format="YYYY-MM-DD 00:00:00"
+
                     ></datePicker>
                  </div>
                  <div v-else>
@@ -106,7 +108,7 @@
                     id="tijdpickerevent"
                     v-model="begintijdeventaanmaken"
                     type="datetime"
-                    format="YYYY-MM-DD HH:mm:00"
+                    format="YYYY-MM-DD HH:MM:00"
                     color="black"
                   ></datePicker>
                   </div>
@@ -120,9 +122,18 @@
                 </v-col>
                 <v-col cols="5">
                   <div v-if="heledag">
+                  <datePicker
+                    id="tijdpickerevent"
+                    v-model="einde"
+                    type="datetime"
+                    format=" YYYY-MM-DD 23:59:00"
+                    value="begintijdeventaanmaken"
+                    color="black"
+                  ></datePicker>
                  </div>
                  <div v-else>
                   <datePicker
+                  disabled
                     id="tijdpickerevent2"
                     v-model="einde"
                     type="datetime"
@@ -223,6 +234,9 @@ export default {
   }),
   components: {
     datePicker: VueDatetimeJs,
+  },
+  props:{
+    today:String
   },
   watch: {
     selectedcalenders: function (val) {
