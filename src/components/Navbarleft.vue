@@ -106,9 +106,10 @@
                  <div v-else>
     <datePicker
                     id="tijdpickerevent"
-                    v-model="begintijdeventaanmaken"
+                    v-model="einde"
                     type="datetime"
-                    format="YYYY-MM-DD HH:MM:00"
+                    format="YYYY-MM-DD 23:59:00"
+                    value="begintijdeventaanmaken"
                     color="black"
                   ></datePicker>
                   </div>
@@ -152,9 +153,9 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col style="margin-left:50px" cols="12">
               <v-row style="margin-bottom: 20px; margin-top: 60px">
-                <v-col cols="9">
+                <v-col cols="5">
                   <h2 style="margin-bottom: 8px">Locatie</h2>
                   <v-btn-toggle v-model="adress" dense>
                     <v-btn value=""> Adress </v-btn>
@@ -163,10 +164,7 @@
 
                     <v-btn value="googlemeet"> Online </v-btn>
                   </v-btn-toggle>
-                </v-col>
-                <v-col cols="3"> </v-col>
-              </v-row>
-              <v-text-field
+                   <v-text-field
                 v-model="adress"
                 filled
                 outlined
@@ -190,6 +188,9 @@
                 placeholder="Binnen enkele minuten ontvang je een bevestiging per email."
                 outlined
               ></v-textarea>
+                </v-col>
+                <v-col cols="7"> </v-col>
+              </v-row>
               <h2 id="gastenTekst">Gasten</h2>
               <v-autocomplete
                 v-model="guestlist"
@@ -245,7 +246,7 @@ export default {
     },
     differentUser: function (val) {
       console.log(val);
-      if (this.differentUser != 0) {
+      if(this.differentUser != 0 ){
         this.$emit("differentUser", this.differentUser);
         this.kalender = [];
         this.getCalendarsDifferentUser();

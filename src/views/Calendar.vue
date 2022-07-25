@@ -1,7 +1,7 @@
 <template>
   <v-row class="fill-height">
     <v-col cols="12" >
-      <InstellingenDialog :instellingen="instellingen" />
+      <InstellingenDialog @instellingen="getInstellingen" :instellingen="instellingen" />
  <v-app-bar clipped-left app flat>
           <v-btn id="vandaagknopje" outlined class="mr-4" color="grey darken-2" @click="setToday">
            <h3 id="vandaagtekst">Vandaag</h3> 
@@ -42,7 +42,7 @@
             </v-list>
           </v-menu>
         </v-app-bar>
-<Navbarleft @calendar="getCalendar" @differentUser="getDifferentUser" :today="today" :focus="focus" />
+<Navbarleft  @calendar="getCalendar" @differentUser="getDifferentUser" :today="today" :focus="focus" />
       <v-sheet id="calendarSheet">
         <v-calendar
           ref="calendar"
@@ -66,9 +66,7 @@
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
             <v-toolbar :color="selectedEvent.color" dark>
-              <v-btn @click="deleteEvent(selectedEvent.id)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
+                            <v-icon style="padding-right:10px" @click="deleteEvent(selectedEvent.id)">mdi-delete</v-icon>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -77,39 +75,42 @@
                 {{ selectedEvent.details }}
               </form>
               <form v-else>
-                <input
-                  v-model="selectedEvent.name"
-                  type="text"
-                  placeholder="add note"
-                />
-                <input />
-                <input
-                  v-model="selectedEvent.color"
-                  type="text"
-                  placeholder="add note"
-                />
-                <input />
-                <input
-                  v-model="selectedEvent.start"
-                  type="text"
-                  placeholder="start"
-                />
-                <input />
-                <input
-                  v-model="selectedEvent.end"
-                  type="text"
-                  placeholder="add note"
-                />
-                <input />
-                <textarea-autosize
-                  v-model="selectedEvent.details"
-                  type="text"
-                  style="width: 100%"
-                  :min-height="100"
-                  placeholder="add note"
-                >
-                </textarea-autosize>
-              </form>
+           <v-text-field
+                v-model="selectedEvent.name"
+                filled
+                outlined
+                color="blue"
+                label="Name"
+                dense
+                background-color="white"
+              ></v-text-field>
+                <v-text-field
+                v-model="selectedEvent.start"
+                filled
+                outlined
+                color="blue"
+                label="Start"
+                dense
+                background-color="white"
+              ></v-text-field>
+                <v-text-field
+                v-model="selectedEvent.end"
+                filled
+                outlined
+                color="blue"
+                label="End"
+                dense
+                background-color="white"
+              ></v-text-field>
+                 <v-textarea
+                 v-model="selectedEvent.details"
+                clearable
+                clear-icon="mdi-close-circle"
+                label="Descriptie"
+                placeholder="Binnen enkele minuten ontvang je een bevestiging per email."
+                outlined
+              ></v-textarea>
+                </form>
             </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
@@ -210,10 +211,12 @@ export default {
     differentUser:null,
     dialogCalendarMaken:false,
     instellingen:false,
+    calendar_id:null,
+    guests:[]
   }),
   mounted() {
     this.incrementerDing();
-    this.getAllEvents();
+        this.getAllEvents();
     this.getCalendarsUser();
     this.getHighestCalendarid();
   },
@@ -261,8 +264,10 @@ export default {
       if(differentUser){
         this.getAllEventsDifferentUser();
       }
+    
       
     },
+    
     user(user) {
       if (user) {
         this.gebruiker = user.id;
@@ -286,6 +291,10 @@ console.log("de calendars", value);
     }, getDifferentUser(value){
       this.differentUser=value;
 console.log("de calendars", this.differentUser);
+    },
+     getInstellingen(value){
+      this.instellingen=value;
+console.log("de calendars", this.instellingen);
     },
     
     getHighestCalendarid() {
@@ -350,6 +359,7 @@ console.log("de calendars", this.differentUser);
             details: ev.details,
             start: ev.start,
             end: ev.end,
+            calendar_id: ev.calendar_id
           },
           {
             headers: {

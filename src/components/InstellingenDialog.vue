@@ -17,6 +17,9 @@
       </v-tab>        
        <v-tabs-items v-model="tabs">
         <v-tab-item>
+                 <v-row>
+                  <v-col cols="3"></v-col>
+                  <v-col cols="5">
             <h1>Maak een nieuwe Calendar</h1>
  <v-text-field
                     v-model="calendarname"
@@ -27,20 +30,28 @@
                     type="Text"
                     dense
                     background-color="white"
-                  ></v-text-field>     
+                  ></v-text-field>   
+                  <v-row> 
                   <div v-for="color in color" :key="color">
         <v-checkbox
           v-model="selectedColor"
           :value="color"
               :color="color"
         ></v-checkbox>
-        {{color}}
       </div>   
+      </v-row> 
+      </v-col>
+                        <v-col cols="4">
+                            <v-btn fab text color="secondary" @click="instellingen = false">
+              <v-icon style="font-size: 30px"> mdi-window-close </v-icon>
+            </v-btn>
+</v-col>
+      </v-row>
                   </v-tab-item>
       <v-tab-item>
         <h1>hey</h1>
                 </v-tab-item>
-
+       
       </v-tabs-items>
       </v-tabs>
      
@@ -70,6 +81,12 @@ highestCalendarId:Number
     ...mapGetters({ user: "getuser" }),
     ...mapGetters({ token: "gettoken" }),
   },
+  watch:{
+  instellingen: function (val) {
+      console.log(val);
+      this.$emit("instellingen", this.instellingen);
+  },
+    },
   methods:{
   }
 }
